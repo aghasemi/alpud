@@ -69,7 +69,9 @@ def compute_informativeness_with_known_prior(positive_data, unlabeled_data, P, q
     total_likelihood = total_kde.evaluate(query_samples)
     
     # a_x = p(x|+)/p(x)
-    a_of_x = positive_likelihood / total_likelihood
+    # Add small epsilon to avoid division by zero
+    epsilon = np.finfo(float).eps
+    a_of_x = positive_likelihood / (total_likelihood + epsilon)
     
     # Now we can compute the informativeness based on Eq. 8 in the paper
     informativeness = np.abs(1 - 2 * P * a_of_x)
@@ -124,7 +126,9 @@ def compute_informativeness_with_unknown_prior(positive_data, unlabeled_data, qu
     total_likelihood = total_kde.evaluate(query_samples)
     
     # a_x = p(x|+)/p(x)
-    a_of_x = positive_likelihood / total_likelihood
+    # Add small epsilon to avoid division by zero
+    epsilon = np.finfo(float).eps
+    a_of_x = positive_likelihood / (total_likelihood + epsilon)
     
     # Now we can compute the informativeness based on Eq. 8 in the paper
     # Note: MATLAB's sgn is equivalent to numpy's sign
